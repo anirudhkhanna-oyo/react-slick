@@ -94,7 +94,12 @@ var helpers = {
     });
   },
   getWidth: function getWidth(elem) {
-    return elem && (elem.getBoundingClientRect().width - 13 || elem.offsetWidth) || 0;
+    if (this.props.width === 100) {
+      return elem && (elem.getBoundingClientRect().width || elem.offsetWidth) || 0;
+    } else {
+      var width = Math.round(elem.getBoundingClientRect().width * this.props.width / 100);
+      return width || elem.offsetWidth || 0;
+    }
   },
   getHeight(elem) {
     return elem && (elem.getBoundingClientRect().height || elem.offsetHeight) || 0;

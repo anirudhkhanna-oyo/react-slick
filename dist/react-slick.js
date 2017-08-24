@@ -385,7 +385,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.changeSlide({ message: 'next' });
 	  },
 	  slickGoTo: function slickGoTo(slide) {
-	    typeof slide === 'number' && this.changeSlide({
+	    slide = Number(slide);
+	    slide && this.changeSlide({
 	      message: 'index',
 	      index: slide,
 	      currentSlide: this.state.currentSlide
@@ -623,7 +624,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      e.preventDefault();
 	      return;
 	    }
+	    if (this.state.scrolling) {
+	      return;
+	    }
 	    if (this.state.animating) {
+	      e.preventDefault();
 	      return;
 	    }
 	    if (this.props.vertical && this.props.swipeToSlide && this.props.verticalSwiping) {
@@ -640,9 +645,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    touchObject.curX = e.touches ? e.touches[0].pageX : e.clientX;
 	    touchObject.curY = e.touches ? e.touches[0].pageY : e.clientY;
 	    touchObject.swipeLength = Math.round(Math.sqrt(Math.pow(touchObject.curX - touchObject.startX, 2)));
+	    var verticalSwipeLength = Math.round(Math.sqrt(Math.pow(touchObject.curY - touchObject.startY, 2)));
+
+	    if (!this.props.verticalSwiping && !this.state.swiping && verticalSwipeLength > 4) {
+	      this.setState({
+	        scrolling: true
+	      });
+	      return;
+	    }
 
 	    if (this.props.verticalSwiping) {
-	      touchObject.swipeLength = Math.round(Math.sqrt(Math.pow(touchObject.curY - touchObject.startY, 2)));
+	      touchObject.swipeLength = verticalSwipeLength;
 	    }
 
 	    positionOffset = (this.props.rtl === false ? 1 : -1) * (touchObject.curX > touchObject.startX ? 1 : -1);
@@ -692,6 +705,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	    if (touchObject.swipeLength > 4) {
+	      this.setState({
+	        swiping: true
+	      });
 	      e.preventDefault();
 	    }
 	  },
@@ -788,14 +804,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	      minSwipe = this.state.listHeight / this.props.touchThreshold;
 	    }
 
+	    var wasScrolling = this.state.scrolling;
 	    // reset the state of touch related state variables.
 	    this.setState({
 	      dragging: false,
 	      edgeDragged: false,
+	      scrolling: false,
+	      swiping: false,
 	      swiped: false,
 	      swipeLeft: null,
 	      touchObject: {}
 	    });
+	    if (wasScrolling) {
+	      return;
+	    }
+
 	    // Fix for #13
 	    if (!touchObject.swipeLength) {
 	      return;
@@ -1211,7 +1234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var listHeight = slideHeight * props.slidesToShow;
 
 	    // pause slider if autoplay is set to false
-	    if (props.autoplay) {
+	    if (!props.autoplay) {
 	      this.pause();
 	    } else {
 	      this.autoPlay();
@@ -1237,10 +1260,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  },
 	  getWidth: function getWidth(elem) {
-	    return elem.getBoundingClientRect().width - 13 || elem.offsetWidth || 0;
+	    if (this.props.width === 100) {
+	      return elem && (elem.getBoundingClientRect().width || elem.offsetWidth) || 0;
+	    } else {
+	      var width = Math.round(elem.getBoundingClientRect().width * this.props.width / 100);
+	      return width || elem.offsetWidth || 0;
+	    }
 	  },
 	  getHeight: function getHeight(elem) {
-	    return elem.getBoundingClientRect().height || elem.offsetHeight || 0;
+	    return elem && (elem.getBoundingClientRect().height || elem.offsetHeight) || 0;
 	  },
 
 	  adaptHeight: function adaptHeight() {
@@ -1512,10 +1540,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    direction: 1,
 	    listWidth: null,
 	    listHeight: null,
+	    scrolling: false,
 	    // loadIndex: 0,
 	    slideCount: null,
 	    slideWidth: null,
 	    slideHeight: null,
+	    swiping: false,
 	    // sliding: false,
 	    // slideOffset: 0,
 	    swipeLeft: null,
@@ -1605,6 +1635,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    beforeChange: null,
 	    edgeEvent: null,
 	    init: null,
+	    width: 100,
 	    swipeEvent: null,
 	    // nextArrow, prevArrow are react componets
 	    nextArrow: null,
@@ -2817,7 +2848,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else {
 	    index = spec.index;
 	  }
-
 	  slickCloned = index < 0 || index >= spec.slideCount;
 	  if (spec.centerMode) {
 	    centerOffset = Math.floor(spec.slidesToShow / 2);
@@ -2881,14 +2911,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      child = _react2.default.createElement('div', null);
 	    }
 	    var childStyle = getSlideStyle((0, _objectAssign2.default)({}, spec, { index: index }));
-	    var slickClasses = getSlideClasses((0, _objectAssign2.default)({ index: index }, spec));
-	    var cssClasses;
-
-	    if (child.props.className) {
-	      cssClasses = (0, _classnames2.default)(slickClasses, child.props.className);
-	    } else {
-	      cssClasses = slickClasses;
-	    }
+	    var slideClass = child.props.className || '';
 
 	    var onClick = function onClick(e) {
 	      child.props && child.props.onClick && child.props.onClick(e);
@@ -2900,7 +2923,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    slides.push(_react2.default.cloneElement(child, {
 	      key: 'original' + getKey(child, index),
 	      'data-index': index,
-	      className: cssClasses,
+	      className: (0, _classnames2.default)(getSlideClasses((0, _objectAssign2.default)({ index: index }, spec)), slideClass),
 	      tabIndex: '-1',
 	      style: (0, _objectAssign2.default)({ outline: 'none' }, child.props.style || {}, childStyle),
 	      onClick: onClick
@@ -2915,7 +2938,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        preCloneSlides.push(_react2.default.cloneElement(child, {
 	          key: 'precloned' + getKey(child, key),
 	          'data-index': key,
-	          className: cssClasses,
+	          className: (0, _classnames2.default)(getSlideClasses((0, _objectAssign2.default)({ index: key }, spec)), slideClass),
 	          style: (0, _objectAssign2.default)({}, child.props.style || {}, childStyle),
 	          onClick: onClick
 	        }));
@@ -2926,7 +2949,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        postCloneSlides.push(_react2.default.cloneElement(child, {
 	          key: 'postcloned' + getKey(child, key),
 	          'data-index': key,
-	          className: cssClasses,
+	          className: (0, _classnames2.default)(getSlideClasses((0, _objectAssign2.default)({ index: key }, spec)), slideClass),
 	          style: (0, _objectAssign2.default)({}, child.props.style || {}, childStyle),
 	          onClick: onClick
 	        }));
