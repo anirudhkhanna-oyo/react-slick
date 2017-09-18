@@ -78,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
-	var _json2mq = __webpack_require__(21);
+	var _json2mq = __webpack_require__(22);
 
 	var _json2mq2 = _interopRequireDefault(_json2mq);
 
@@ -86,7 +86,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _defaultProps2 = _interopRequireDefault(_defaultProps);
 
-	var _canUseDom = __webpack_require__(23);
+	var _canUseDom = __webpack_require__(24);
 
 	var _canUseDom2 = _interopRequireDefault(_canUseDom);
 
@@ -98,7 +98,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var enquire = _canUseDom2.default && __webpack_require__(24);
+	var enquire = _canUseDom2.default && __webpack_require__(25);
 
 	var Slider = function (_React$Component) {
 	  _inherits(Slider, _React$Component);
@@ -273,7 +273,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _dots = __webpack_require__(19);
 
-	var _arrows = __webpack_require__(20);
+	var _counts = __webpack_require__(20);
+
+	var _arrows = __webpack_require__(21);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -433,6 +435,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      dots = _react2.default.createElement(_dots.Dots, dotProps);
 	    }
 
+	    var ImageCounts;
+
+	    if (this.props.count === true && this.state.slideCount >= this.props.slidesToShow) {
+	      var dotProps = {
+	        countClass: this.props.countClass,
+	        slideCount: this.state.slideCount,
+	        slidesToShow: this.props.slidesToShow,
+	        currentSlide: this.state.currentSlide,
+	        slidesToScroll: this.props.slidesToScroll,
+	        clickHandler: this.changeSlide,
+	        children: this.props.children,
+	        customPaging: this.props.customPaging
+	      };
+
+	      ImageCounts = _react2.default.createElement(ImageCounts, dotProps);
+	    }
+
 	    var prevArrow, nextArrow;
 
 	    var arrowProps = {
@@ -508,7 +527,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        )
 	      ),
 	      nextArrow,
-	      dots
+	      dots,
+	      ImageCounts
 	    );
 	  }
 	});
@@ -1608,6 +1628,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    dots: false,
 	    dotsClass: 'slick-dots',
+	    count: false,
+	    countClass: 'slick-count',
 	    draggable: true,
 	    easing: 'linear',
 	    edgeFriction: 0.35,
@@ -3084,6 +3106,63 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	exports.__esModule = true;
+	exports.ImageCounts = undefined;
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(17);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var getDotCount = function getDotCount(spec) {
+	  var dots;
+	  dots = Math.ceil(spec.slideCount / spec.slidesToScroll);
+	  return dots;
+	};
+
+	var ImageCounts = exports.ImageCounts = function (_React$Component) {
+	  _inherits(ImageCounts, _React$Component);
+
+	  function ImageCounts() {
+	    _classCallCheck(this, ImageCounts);
+
+	    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
+	  }
+
+	  ImageCounts.prototype.render = function render() {
+
+	    var dotCount = getDotCount({
+	      slideCount: this.props.slideCount,
+	      slidesToScroll: this.props.slidesToScroll
+	    });
+
+	    return _react2.default.createElement(
+	      'div',
+	      { className: this.props.countClass },
+	      this.props.currentSlide + 1 + '/' + dotCount
+	    );
+	  };
+
+	  return ImageCounts;
+	}(_react2.default.Component);
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
 	exports.NextArrow = exports.PrevArrow = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -3217,10 +3296,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react2.default.Component);
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var camel2hyphen = __webpack_require__(22);
+	var camel2hyphen = __webpack_require__(23);
 
 	var isDimension = function (feature) {
 	  var re = /[height|width]$/;
@@ -3273,7 +3352,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = json2mq;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 	var camel2hyphen = function (str) {
@@ -3287,7 +3366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = camel2hyphen;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 	var canUseDOM = !!(
@@ -3299,19 +3378,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = canUseDOM;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var MediaQueryDispatch = __webpack_require__(25);
+	var MediaQueryDispatch = __webpack_require__(26);
 	module.exports = new MediaQueryDispatch();
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var MediaQuery = __webpack_require__(26);
-	var Util = __webpack_require__(28);
+	var MediaQuery = __webpack_require__(27);
+	var Util = __webpack_require__(29);
 	var each = Util.each;
 	var isFunction = Util.isFunction;
 	var isArray = Util.isArray;
@@ -3398,11 +3477,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var QueryHandler = __webpack_require__(27);
-	var each = __webpack_require__(28).each;
+	var QueryHandler = __webpack_require__(28);
+	var each = __webpack_require__(29).each;
 
 	/**
 	 * Represents a single media query, manages it's state and registered handlers for this query
@@ -3497,7 +3576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 	/**
@@ -3577,7 +3656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 	/**

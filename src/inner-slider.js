@@ -11,6 +11,7 @@ import assign from 'object-assign';
 
 import { Track } from './track';
 import { Dots } from './dots';
+import { ImageCounts } from './counts';
 import { PrevArrow, NextArrow } from './arrows';
 
 export var InnerSlider = createReactClass({
@@ -167,6 +168,23 @@ export var InnerSlider = createReactClass({
       dots = (<Dots {...dotProps} />);
     }
 
+    var ImageCounts;
+
+    if (this.props.count === true && this.state.slideCount >= this.props.slidesToShow) {
+      var dotProps = {
+        countClass: this.props.countClass,
+        slideCount: this.state.slideCount,
+        slidesToShow: this.props.slidesToShow,
+        currentSlide: this.state.currentSlide,
+        slidesToScroll: this.props.slidesToScroll,
+        clickHandler: this.changeSlide,
+        children: this.props.children,
+        customPaging: this.props.customPaging
+      };
+
+      ImageCounts = (<ImageCounts {...dotProps} />);
+    }
+
     var prevArrow, nextArrow;
 
     var arrowProps = {
@@ -238,6 +256,7 @@ export var InnerSlider = createReactClass({
         </div>
         {nextArrow}
         {dots}
+        {ImageCounts}
       </div>
     );
   }

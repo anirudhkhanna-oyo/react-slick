@@ -15,6 +15,8 @@ var defaultProps = {
     },
     dots: false,
     dotsClass: 'slick-dots',
+    count: false,
+    countClass: 'slick-count',
     draggable: true,
     easing: 'linear',
     edgeFriction: 0.35,
