@@ -435,10 +435,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      dots = _react2.default.createElement(_dots.Dots, dotProps);
 	    }
 
-	    var ImageCounts;
+	    var imagecounts;
 
 	    if (this.props.count === true && this.state.slideCount >= this.props.slidesToShow) {
-	      var dotProps = {
+	      var countProps = {
 	        countClass: this.props.countClass,
 	        slideCount: this.state.slideCount,
 	        slidesToShow: this.props.slidesToShow,
@@ -449,7 +449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        customPaging: this.props.customPaging
 	      };
 
-	      ImageCounts = _react2.default.createElement(ImageCounts, dotProps);
+	      imagecounts = _react2.default.createElement(_counts.ImageCounts, countProps);
 	    }
 
 	    var prevArrow, nextArrow;
@@ -528,7 +528,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ),
 	      nextArrow,
 	      dots,
-	      ImageCounts
+	      imagecounts
 	    );
 	  }
 	});
@@ -3124,7 +3124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var getDotCount = function getDotCount(spec) {
+	var getSlideCount = function getSlideCount(spec) {
 	  var dots;
 	  dots = Math.ceil(spec.slideCount / spec.slidesToScroll);
 	  return dots;
@@ -3141,7 +3141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  ImageCounts.prototype.render = function render() {
 
-	    var dotCount = getDotCount({
+	    var dotCount = getSlideCount({
 	      slideCount: this.props.slideCount,
 	      slidesToScroll: this.props.slidesToScroll
 	    });

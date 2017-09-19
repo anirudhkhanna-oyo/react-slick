@@ -168,10 +168,10 @@ export var InnerSlider = createReactClass({
       dots = (<Dots {...dotProps} />);
     }
 
-    var ImageCounts;
+    var imagecounts;
 
     if (this.props.count === true && this.state.slideCount >= this.props.slidesToShow) {
-      var dotProps = {
+      var countProps = {
         countClass: this.props.countClass,
         slideCount: this.state.slideCount,
         slidesToShow: this.props.slidesToShow,
@@ -182,7 +182,7 @@ export var InnerSlider = createReactClass({
         customPaging: this.props.customPaging
       };
 
-      ImageCounts = (<ImageCounts {...dotProps} />);
+      imagecounts = (<ImageCounts {...countProps} />);
     }
 
     var prevArrow, nextArrow;
@@ -256,7 +256,7 @@ export var InnerSlider = createReactClass({
         </div>
         {nextArrow}
         {dots}
-        {ImageCounts}
+        {imagecounts}
       </div>
     );
   }

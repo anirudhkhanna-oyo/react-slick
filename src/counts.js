@@ -3,7 +3,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-var getDotCount = function (spec) {
+var getSlideCount = function (spec) {
   var dots;
   dots = Math.ceil(spec.slideCount / spec.slidesToScroll);
   return dots;
@@ -13,7 +13,7 @@ var getDotCount = function (spec) {
 export class ImageCounts extends React.Component {
   render() {
 
-    var dotCount = getDotCount({
+    var dotCount = getSlideCount({
       slideCount: this.props.slideCount,
       slidesToScroll: this.props.slidesToScroll
     });
