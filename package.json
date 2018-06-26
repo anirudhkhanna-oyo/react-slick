@@ -1,5 +1,5 @@
 {
-  "name": "react-slick",
+  "name": "hg-react-slick",
   "version": "0.14.11",
   "description": " React port of slick carousel",
   "main": "./lib",
